@@ -1,4 +1,4 @@
-import { Pillars, Gan, Zhi, Util, Key } from './base';
+import { Pillars, Gan, Zhi, Util, Key, Shen } from './base';
 
 /**
  * 八字
@@ -50,6 +50,9 @@ class Zhu {
   /** 藏干十神 */
   zs: Array<number>;
 
+  /** 旬空 */
+  xk: Array<number>;
+
   /** 長生十二運 */
   yun: number;
 
@@ -66,6 +69,7 @@ class Zhu {
     this.z = z;
     this.zg = Zhi(z).CangGan;
     this.zs = this.zg.map((i) => Gan(ref).shiShen(i));
+    this.xk = Shen.XunKong(g, z);
     this.yun = Gan(ref).Yun(z);
     this.nayin = Util.NaYin(g, z);
     this.shen = [];
@@ -86,8 +90,7 @@ export const BaZiUtil = {
       `${G[v.sizhu.r.g]}　　　　` +
       `${G[v.sizhu.m.g]}　　　　` +
       `${G[v.sizhu.y.g]}\n` +
-      `  ${S[v.sizhu.s.gs]}　　　` +
-      `  ${S[v.sizhu.r.gs]}　　　` +
+      `  ${S[v.sizhu.s.gs]}　　　 日元 　　` +
       `  ${S[v.sizhu.m.gs]}　　　` +
       `  ${S[v.sizhu.y.gs]}\n` +
       `${Z[v.sizhu.s.z]}　　　　` +
@@ -106,6 +109,11 @@ export const BaZiUtil = {
       ` ${G[v.sizhu.r.zg[2]] || '　'}${S[v.sizhu.r.zs[2]] || '　'} 　　` +
       ` ${G[v.sizhu.m.zg[2]] || '　'}${S[v.sizhu.m.zs[2]] || '　'} 　　` +
       ` ${G[v.sizhu.y.zg[2]] || '　'}${S[v.sizhu.y.zs[2]] || '　'}\n` +
+      '------------------------------------\n' +
+      `${Z[v.sizhu.s.xk[0]]}${Z[v.sizhu.s.xk[1]]}　　　`.slice(0, 5) +
+      `${Z[v.sizhu.r.xk[0]]}${Z[v.sizhu.r.xk[1]]}　　　`.slice(0, 5) +
+      `${Z[v.sizhu.m.xk[0]]}${Z[v.sizhu.m.xk[1]]}　　　`.slice(0, 5) +
+      `${Z[v.sizhu.y.xk[0]]}${Z[v.sizhu.y.xk[1]]}\n` +
       '------------------------------------\n' +
       `${Y[v.sizhu.s.yun]}　　　　`.slice(0, 5) +
       `${Y[v.sizhu.r.yun]}　　　　`.slice(0, 5) +

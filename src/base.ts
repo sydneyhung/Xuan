@@ -184,7 +184,7 @@ export function Zhi(i: number) {
       [4, 1, 9],
       [2, 4, 6],
       [3, 5],
-      [5, 1, 3],
+      [5, 3, 1],
       [6, 8, 4],
       [7],
       [4, 7, 3],
@@ -231,6 +231,13 @@ export const Shen = {
     const xunShou = (rZhi - rGan + 12) % 12;
     const r = (i - xunShou + 12) % 12;
     return r > 9 ? -1 : r;
+  },
+
+  /** 旬空: (rGan, rZhi) => [gan-idx] */
+  XunKong: (rGan: number, rZhi: number) => {
+    const xunShou = (rZhi - rGan + 12) % 12;
+    const r = (xunShou + 10) % 12;
+    return [r, r + 1];
   },
 
   /** 天乙貴人: (rGan, sZhi) => zhi-idx  */
