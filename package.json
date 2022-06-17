@@ -5,8 +5,8 @@
   "license": "MIT",
   "author": "Sydney Hung",
   "scripts": {
-    "build-8Z": "esbuild widgets/bazi/main.js --bundle --minify --outfile=widgets/bazi/index.js",
-    "build-6R": "esbuild widgets/liuren/main.js --bundle --minify --outfile=widgets/liuren/index.js",
+    "b8Z": "esbuild widgets/bazi/main.js --bundle --minify --outfile=widgets/bazi/index.js",
+    "b6R": "esbuild widgets/liuren/main.js --bundle --minify --outfile=widgets/liuren/index.js",
     "test": "jest"
   },
   "eslintConfig": {
