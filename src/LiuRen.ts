@@ -11,6 +11,21 @@ type LiuRenInput = {
  * 六壬
  */
 export class LiuRen {
+  /** data */
+  data: LiuRenInput;
+
+  /** 四柱 */
+  pillars?: Pillars;
+
+  /** 天地盤 */
+  pan: Pan;
+
+  /** 四課 */
+  ke: Ke;
+
+  /** 三傳 */
+  chuan: Chuan;
+
   constructor(input: Date | LiuRenInput) {
     let data: LiuRenInput;
     if (input instanceof Date) {
@@ -27,35 +42,12 @@ export class LiuRen {
     this.chuan = new Chuan(this.pan, this.ke);
     this.data = data;
   }
-
-  /** data */
-  data: LiuRenInput;
-
-  /** 四柱 */
-  pillars?: Pillars;
-
-  /** 天地盤 */
-  pan: Pan;
-
-  /** 四課 */
-  ke: Ke;
-
-  /** 三傳 */
-  chuan: Chuan;
 }
 
 /**
  * 天地盤
  */
 class Pan {
-  constructor(input: LiuRenInput) {
-    const { yueJiang, zhan, rGan, rZhi } = input;
-    this.diff = (zhan - yueJiang + 12) % 12;
-    this.zhi = this.getZhiShen(yueJiang, zhan);
-    this.gan = this.zhi.map((i) => Shen.XunDun(rGan, rZhi, i));
-    this.jiang = this.getTianJiang(rGan, zhan);
-  }
-
   /** ZhiShen Array 0~11 */
   zhi: Array<number>;
 
@@ -67,6 +59,14 @@ class Pan {
 
   /** Tian-Di index difference */
   diff = 0;
+
+  constructor(input: LiuRenInput) {
+    const { yueJiang, zhan, rGan, rZhi } = input;
+    this.diff = (zhan - yueJiang + 12) % 12;
+    this.zhi = this.getZhiShen(yueJiang, zhan);
+    this.gan = this.zhi.map((i) => Shen.XunDun(rGan, rZhi, i));
+    this.jiang = this.getTianJiang(rGan, zhan);
+  }
 
   /**
    * 支神
@@ -98,16 +98,6 @@ class Pan {
  * 四課
  */
 class Ke {
-  constructor(p: Pan, input: LiuRenInput) {
-    const { rGan, rZhi } = input;
-    const r = Gan(rGan).JiGong;
-    this.earth = [r, p.zhi[r], rZhi, p.zhi[rZhi]];
-    this.heaven = this.earth.map((i) => p.zhi[i]);
-    this.jiang = this.earth.map((i) => p.jiang[i]);
-    this.rGan = rGan;
-    this.rZhi = rZhi;
-  }
-
   /** DiPan ZhiShen Array 0~3 */
   earth: Array<number>;
 
@@ -122,19 +112,22 @@ class Ke {
 
   /** RiZhi */
   rZhi: number;
+
+  constructor(p: Pan, input: LiuRenInput) {
+    const { rGan, rZhi } = input;
+    const r = Gan(rGan).JiGong;
+    this.earth = [r, p.zhi[r], rZhi, p.zhi[rZhi]];
+    this.heaven = this.earth.map((i) => p.zhi[i]);
+    this.jiang = this.earth.map((i) => p.jiang[i]);
+    this.rGan = rGan;
+    this.rZhi = rZhi;
+  }
 }
 
 /**
  * 三傳
  */
 class Chuan {
-  constructor(p: Pan, k: Ke) {
-    this.zhi = this.getChuan(p, k);
-    this.gan = this.zhi.map((i) => Shen.XunDun(k.rGan, k.rZhi, i));
-    this.jiang = this.zhi.map((i) => p.jiang[p.zhi.indexOf(i)]);
-    this.qin = this.zhi.map((i) => Gan(k.rGan).shengKe(Zhi(i).WuXing));
-  }
-
   /** ZhiShen Array 0~2 */
   zhi: Array<number>;
 
@@ -149,6 +142,13 @@ class Chuan {
 
   /** 九宗門 */
   method = '';
+
+  constructor(p: Pan, k: Ke) {
+    this.zhi = this.getChuan(p, k);
+    this.gan = this.zhi.map((i) => Shen.XunDun(k.rGan, k.rZhi, i));
+    this.jiang = this.zhi.map((i) => p.jiang[p.zhi.indexOf(i)]);
+    this.qin = this.zhi.map((i) => Gan(k.rGan).shengKe(Zhi(i).WuXing));
+  }
 
   getChuan(p: Pan, k: Ke) {
     const wg = Gan(k.rGan).WuXing;

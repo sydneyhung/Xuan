@@ -7,7 +7,7 @@ export const Key = {
   WuXing: '木火土金水',
   Gan: '甲乙丙丁戊己庚辛壬癸',
   Zhi: '子丑寅卯辰巳午未申酉戌亥',
-  Yun:['長生', '沐浴', '冠帶', '臨官', '帝旺', '衰', '病', '死', '墓', '絕', '胎', '養'],
+  Yun: ['長生', '沐浴', '冠帶', '臨官', '帝旺', '衰', '病', '死', '墓', '絕', '胎', '養'],
   LiuQin: '兄子財官父',
   LiuQin2: [
     '兄弟', '子孫', '妻財', '官鬼', '父母'
@@ -119,7 +119,7 @@ export function Gan(i: number) {
     /** 寄宮: gna => index of `key.Zhi` */
     JiGong: [2, 4, 5, 7, 5, 7, 8, 10, 11, 1][i],
 
-    /** 十二運 gan-idx => index of `key.Yun` */
+    /** 長生十二運 gan-idx => index of `key.Yun` */
     Yun: (z: number) => {
       const s = [1, 6, 10, 9, 10, 9, 7, 0, 4, 3];
       return i % 2 == 0 ? (s[i] + z) % 12 : (s[i] - z + 12) % 12;

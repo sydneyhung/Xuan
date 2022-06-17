@@ -4,16 +4,16 @@ import { Pillars, Gan, Zhi, Util, Key } from './base';
  * 八字
  */
 export class BaZi {
-  constructor(time: Date, gender: string) {
-    this.sizhu = this.getBaZi(time);
-    this.dayun = this.getDaYun(gender);
-  }
-
   /** 四柱 */
   sizhu: { y: Zhu; m: Zhu; r: Zhu; s: Zhu };
 
   /** 大運 */
   dayun: Array<string>;
+
+  constructor(time: Date, gender: string) {
+    this.sizhu = this.getBaZi(time);
+    this.dayun = this.getDaYun(gender);
+  }
 
   getBaZi(time: Date) {
     const p = new Pillars(time);
@@ -31,7 +31,34 @@ export class BaZi {
   }
 }
 
+/**
+ * 柱
+ */
 class Zhu {
+  /** 天干 */
+  g: number;
+
+  /** 天干十神 */
+  gs: number;
+
+  /** 地支 */
+  z: number;
+
+  /** 地支藏干 */
+  zg: Array<number>;
+
+  /** 藏干十神 */
+  zs: Array<number>;
+
+  /** 長生十二運 */
+  yun: number;
+
+  /** 納音 */
+  nayin: number;
+
+  /** 神煞 */
+  shen: Array<string>;
+
   constructor(g: number, z: number, r?: number) {
     const ref = r === undefined ? g : r;
     this.g = g;
@@ -43,14 +70,6 @@ class Zhu {
     this.nayin = Util.NaYin(g, z);
     this.shen = [];
   }
-  g: number;
-  gs: number;
-  z: number;
-  zg: Array<number>;
-  zs: Array<number>;
-  yun: number;
-  nayin: number;
-  shen: Array<string>;
 }
 
 export const BaZiUtil = {
