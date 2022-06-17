@@ -1,0 +1,170 @@
+@font-face {
+  font-family: 'myFont';
+  src: url('../assets/kaiu.ttf');
+}
+.n {
+  font-family: 'myFont';
+  font-size: 96%;
+}
+.q {
+  font-family: 'myFont';
+  font-size: 60%;
+  margin: auto;
+}
+.z {
+  color: rgb(240, 150, 60);
+  font-family: 'myFont';
+  font-size: 111%;
+  margin: auto;
+}
+.g {
+  color: rgb(81, 81, 81);
+  font-family: 'myFont';
+  font-size: 84%;
+  margin: auto;
+}
+.j {
+  color: rgb(12, 120, 120);
+  font-family: 'myFont';
+  font-size: 96%;
+  margin: auto;
+}
+.cell .z {
+  margin-left: 0px;
+  margin-bottom: 3px;
+}
+.cell .g {
+  margin-top: 3px;
+  margin-left: 3px;
+}
+.cell .j {
+  margin-right: 0;
+  grid-column-start: span 2;
+}
+#root {
+  margin: 6% auto;
+}
+#inputs {
+  width: 240px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  border-style: solid;
+}
+#pillars {
+  width: 240px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-style: none solid;
+}
+#c3 {
+  width: 240px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  border-style: solid;
+}
+#k4 {
+  width: 240px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-style: none solid;
+}
+#td {
+  width: 240px;
+  height: 240px;
+  margin: auto;
+  display: grid;
+  gap: 3px;
+  grid-template-columns: repeat(4, 1fr);
+  border: solid;
+}
+.pillar {
+  margin: 9px auto;
+  font-size: 120%;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.chuan {
+  margin: 3px auto;
+  font-size: 120%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+.ke {
+  margin: 9px auto;
+  font-size: 120%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3px;
+}
+.cell {
+  background-color: rgb(245, 245, 245);
+  writing-mode: vertical-rl;
+  font-size: 111%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-radius: 9px;
+}
+#cell-0 {
+  grid-column: 3 / 4;
+  grid-row: 4 / 5;
+}
+#cell-1 {
+  grid-column: 2 / 3;
+  grid-row: 4 / 5;
+}
+#cell-2 {
+  grid-column: 1 / 2;
+  grid-row: 4 / 5;
+}
+#cell-3 {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+}
+#cell-4 {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+#cell-5 {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+#cell-6 {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+#cell-7 {
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
+}
+#cell-8 {
+  grid-column: 4 / 5;
+  grid-row: 1 / 2;
+}
+#cell-9 {
+  grid-column: 4 / 5;
+  grid-row: 2 / 3;
+}
+#cell-10 {
+  grid-column: 4 / 5;
+  grid-row: 3 / 4;
+}
+#cell-11 {
+  grid-column: 4 / 5;
+  grid-row: 4 / 5;
+}
+#note-box {
+  color: gray;
+  font-size: 12px;
+  text-align: center;
+  overflow-y: hidden;
+  grid-column: 2 / 4;
+  grid-row: 2 / 4;
+  resize: none;
+  border: none;
+}

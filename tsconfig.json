@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es2016",
+    "module": "commonjs",
+    "rootDir": ".",
+    "outDir": "out",
+    "esModuleInterop": true
+  },
+  "include": ["scripts", "src"],
+  "exclude": ["node_modules"]
+}

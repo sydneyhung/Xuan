@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../assets/stars.png" />
+    <link rel="stylesheet" href="index.css" />
+    <title>八字</title>
+  </head>
+  <body>
+    <div id="root">
+      <div id="inputs">
+        <p class="editable" contenteditable="true">1995</p>
+        <p>年</p>
+        <p class="editable" contenteditable="true">1</p>
+        <p>月</p>
+        <p class="editable" contenteditable="true">1</p>
+        <p>日</p>
+        <p class="editable" contenteditable="true">1</p>
+        <p>時</p>
+        <p id="btn-gender" onclick="change()">陽男</p>
+      </div>
+      <div id="content"></div>
+    </div>
+
+    <script>
+      function change() {
+        const btn = document.getElementById('btn-gender');
+        if (btn.innerText[1] == '男') {
+          btn.innerText = btn.innerText[0] + '女';
+        } else {
+          btn.innerText = btn.innerText[0] + '男';
+        }
+      }
+    </script>
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'myFont';
+  src: url('../assets/kaiu.ttf');
+}
+
+#root {
+  width: 240px;
+  height: 540px;
+  margin: 6% auto;
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+}
+
+#inputs {
+  display: flex;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 5px;
+  font-family: 'myFont';
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  border-style: solid solid solid none;
+}
+
+.editable {
+  color: rgb(72, 36, 36);
+  margin: auto;
+  font-family: 'myFont';
+  font-weight: bolder;
+}
+
+p {
+  margin: auto;
+  padding: 6px 0;
+}
+
+#content {
+  border-style: solid;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
