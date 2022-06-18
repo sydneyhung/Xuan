@@ -5,12 +5,21 @@ import { Pillars, Gan, Zhi, Util, Key, Shen } from './base';
  */
 export class BaZi {
   /** 四柱 */
-  sizhu: { y: Zhu; m: Zhu; r: Zhu; s: Zhu };
+  sizhu: {
+    y: Zhu;
+    m: Zhu;
+    r: Zhu;
+    s: Zhu;
+  };
 
   /** 大運 */
-  dayun: Array<string>;
+  dayun: {
+    start: string;
+    yun: Array<string>;
+    time: Array<string>;
+  };
 
-  constructor(time: Date, gender: string) {
+  constructor(time: Date, gender: number) {
     this.sizhu = this.getBaZi(time);
     this.dayun = this.getDaYun(gender);
   }
@@ -26,8 +35,17 @@ export class BaZi {
     return ret;
   }
 
-  getDaYun(gender: string) {
-    return [];
+  getDaYun(gender: number) {
+    const f = Gan(this.sizhu.y.g).YinYang == gender;
+    const s = 2020; //
+    const jz = Util.JiaZi(this.sizhu.m.g, this.sizhu.m.z);
+    const y = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ((f ? n : -n) + jz) % 60);
+    const t = [0, 1, 2, 3, 4, 5, 6, 7].map((n) => 10 * n + s);
+    return {
+      start: '大運',
+      yun: y.map((n) => Key.Gan[n % 10] + Key.Zhi[n % 12]),
+      time: t.map((n) => n.toString()),
+    };
   }
 }
 
@@ -124,7 +142,16 @@ export const BaZiUtil = {
       `${N[v.sizhu.r.nayin]}　　　`.slice(0, 5) +
       `${N[v.sizhu.m.nayin]}　　　`.slice(0, 5) +
       `${N[v.sizhu.y.nayin]}\n` +
-      '------------------------------------\n';
+      '------------------------------------\n' +
+      `${v.dayun.start}\n   ` +
+      `${v.dayun.time[0]}  ${v.dayun.yun[0]}\n   ` +
+      `${v.dayun.time[1]}  ${v.dayun.yun[1]}\n   ` +
+      `${v.dayun.time[2]}  ${v.dayun.yun[2]}\n   ` +
+      `${v.dayun.time[3]}  ${v.dayun.yun[3]}\n   ` +
+      `${v.dayun.time[4]}  ${v.dayun.yun[4]}\n   ` +
+      `${v.dayun.time[5]}  ${v.dayun.yun[5]}\n   ` +
+      `${v.dayun.time[6]}  ${v.dayun.yun[6]}\n   ` +
+      `${v.dayun.time[7]}  ${v.dayun.yun[7]}`;
     console.log(str);
   },
 };

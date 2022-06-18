@@ -72,11 +72,15 @@ export const Util = {
     return sk + yy;
   },
 
+  /** 甲子 */
+  JiaZi(g: number, z: number) {
+    for (let i = z; i < 60; i += 12) if (i % 10 == g) return i;
+    return -1;
+  },
+
   /** 納音 */
   NaYin(g: number, z: number) {
-    for (let i = 0; i < 60; i++)
-      if (i % 10 == g && i % 12 == z) return Math.floor(i / 2);
-    return -1;
+    return Math.floor(this.JiaZi(g, z) / 2);
   },
 
   /** 年柱月柱 */
