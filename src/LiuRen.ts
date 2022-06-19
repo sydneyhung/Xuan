@@ -1,4 +1,4 @@
-import { Pillars, Gan, Zhi, Shen, Util, Key } from './base';
+import { Pillars, JieQi, Gan, Zhi, Util, Key } from './base';
 
 type LiuRenInput = {
   yueJiang: number;
@@ -31,7 +31,7 @@ export class LiuRen {
     if (input instanceof Date) {
       this.pillars = new Pillars(input);
       data = {
-        yueJiang: Shen.YueJiang(input),
+        yueJiang: Star.YueJiang(input),
         zhan: this.pillars.sZhi,
         rGan: this.pillars.rGan,
         rZhi: this.pillars.rZhi,
@@ -64,7 +64,7 @@ class Pan {
     const { yueJiang, zhan, rGan, rZhi } = input;
     this.diff = (zhan - yueJiang + 12) % 12;
     this.zhi = this.getZhiShen(yueJiang, zhan);
-    this.gan = this.zhi.map((i) => Shen.XunDun(rGan, rZhi, i));
+    this.gan = this.zhi.map((i) => Star.XunDun(rGan, rZhi, i));
     this.jiang = this.getTianJiang(rGan, zhan);
   }
 
@@ -87,7 +87,7 @@ class Pan {
    * @returns index: 地盤; value: 天將
    */
   getTianJiang(rGan: number, sZhi: number) {
-    const i = (Shen.GuiRen(rGan, sZhi) + this.diff) % 12;
+    const i = (Star.GuiRen(rGan, sZhi) + this.diff) % 12;
     const s = [...Array(12).keys()];
     const t = i < 5 || i == 11 ? s : [0, ...s.slice(1).reverse()];
     return [...t.slice(12 - i), ...t.slice(0, 12 - i)];
@@ -145,7 +145,7 @@ class Chuan {
 
   constructor(p: Pan, k: Ke) {
     this.zhi = this.getChuan(p, k);
-    this.gan = this.zhi.map((i) => Shen.XunDun(k.rGan, k.rZhi, i));
+    this.gan = this.zhi.map((i) => Star.XunDun(k.rGan, k.rZhi, i));
     this.jiang = this.zhi.map((i) => p.jiang[p.zhi.indexOf(i)]);
     this.qin = this.zhi.map((i) => Gan(k.rGan).shengKe(Zhi(i).WuXing));
   }
@@ -300,9 +300,45 @@ class Chuan {
     const zk = this.ZeiKe(k, p);
     this.method = '返吟';
     if (zk.length) return zk;
-    else return [Shen.YiMa(k.rZhi), k.heaven[2], k.heaven[0]];
+    else return [Star.YiMa(k.rZhi), k.heaven[2], k.heaven[0]];
   }
 }
+
+const Star = {
+  /** 月令: time => zhi-idx */
+  YueLing: (time: Date) => JieQi.getJie(time),
+
+  /** 月將: time => zhi-idx */
+  YueJiang: (time: Date) => (13 - JieQi.getQi(time)) % 12,
+
+  /** 旬遁: (rGan, rZhi, zhi-idx) => gan-idx */
+  XunDun: (rGan: number, rZhi: number, i: number) => {
+    const xunShou = (rZhi - rGan + 12) % 12;
+    const r = (i - xunShou + 12) % 12;
+    return r > 9 ? -1 : r;
+  },
+
+  /** 旬空: (rGan, rZhi) => [gan-idx] */
+  XunKong: (rGan: number, rZhi: number) => {
+    const xunShou = (rZhi - rGan + 12) % 12;
+    const r = (xunShou + 10) % 12;
+    return [r, r + 1];
+  },
+
+  /** 天乙貴人: (rGan, sZhi) => zhi-idx  */
+  GuiRen: (rGan: number, sZhi: number) => {
+    const isDay = sZhi >= 3 && sZhi < 9;
+    return isDay // 甲戊庚牛羊
+      ? [1, 0, 11, 11, 1, 0, 1, 6, 5, 5][rGan]
+      : [7, 8, 9, 9, 7, 8, 7, 2, 3, 3][rGan];
+    // return isDay // 甲羊戊庚牛
+    //   ? [7, 8, 9, 11, 1, 0, 1, 2, 3, 5][rGan]
+    //   : [1, 0, 11, 9, 7, 8, 7, 6, 5, 3][rGan];
+  },
+
+  /** 驛馬: rZhi => zhi-idx */
+  YiMa: (rZhi: number) => [2, 11, 8, 5, 2, 11, 8, 5, 2, 11, 8, 5][rZhi],
+};
 
 export const LiuRenUtil = {
   log(v: LiuRen | Pan | Ke | Chuan | Pillars) {

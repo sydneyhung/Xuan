@@ -1,4 +1,4 @@
-import { Pillars, Gan, Zhi, Util, Key, Shen } from './base';
+import { Pillars, JieQi, Gan, Zhi, Util, Key } from './base';
 
 /**
  * 八字
@@ -19,9 +19,12 @@ export class BaZi {
     time: Array<string>;
   };
 
-  constructor(time: Date, gender: number) {
-    this.sizhu = this.getBaZi(time);
-    this.dayun = this.getDaYun(gender);
+  /** 神煞 */
+  shen: unknown;
+
+  constructor(birth: Date, gender: number) {
+    this.sizhu = this.getBaZi(birth);
+    this.dayun = this.getDaYun(birth, gender);
   }
 
   getBaZi(time: Date) {
@@ -35,14 +38,20 @@ export class BaZi {
     return ret;
   }
 
-  getDaYun(gender: number) {
-    const f = Gan(this.sizhu.y.g).YinYang == gender;
-    const s = 2020; //
+  getDaYun(birth: Date, gender: number) {
     const jz = Util.JiaZi(this.sizhu.m.g, this.sizhu.m.z);
+    const f = Gan(this.sizhu.y.g).YinYang == gender;
+
+    const jie = new Date('1995-11-08T05:35:08.000Z'); //todo
+    const s = new Date(
+      birth.getTime() + Math.abs(jie.getTime() - birth.getTime()) * 120
+    );
     const y = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ((f ? n : -n) + jz) % 60);
-    const t = [0, 1, 2, 3, 4, 5, 6, 7].map((n) => 10 * n + s);
+    const t = [0, 1, 2, 3, 4, 5, 6, 7].map((n) =>
+      Math.floor(s.getFullYear() + 10 * n)
+    );
     return {
-      start: '大運',
+      start: `大運 ${s.getFullYear()}/${s.getMonth() + 1}/${s.getDate()}`,
       yun: y.map((n) => Key.Gan[n % 10] + Key.Zhi[n % 12]),
       time: t.map((n) => n.toString()),
     };
@@ -77,9 +86,6 @@ class Zhu {
   /** 納音 */
   nayin: number;
 
-  /** 神煞 */
-  shen: Array<string>;
-
   constructor(g: number, z: number, r?: number) {
     const ref = r === undefined ? g : r;
     this.g = g;
@@ -87,12 +93,29 @@ class Zhu {
     this.z = z;
     this.zg = Zhi(z).CangGan;
     this.zs = this.zg.map((i) => Gan(ref).shiShen(i));
-    this.xk = Shen.XunKong(g, z);
+    this.xk = Star.XunKong(g, z);
     this.yun = Gan(ref).Yun(z);
     this.nayin = Util.NaYin(g, z);
-    this.shen = [];
   }
 }
+
+const Star = {
+  /** 旬空: (rGan, rZhi) => [gan-idx] */
+  XunKong: (rGan: number, rZhi: number) => {
+    const xunShou = (rZhi - rGan + 12) % 12;
+    const r = (xunShou + 10) % 12;
+    return [r, r + 1];
+  },
+
+  /** 天乙貴人: (rGan, sZhi) => zhi-idx  */
+  GuiRen: (rGan: number, sZhi: number) => {
+    [1, 0, 11, 11, 1, 0, 1, 6, 5, 5][rGan] +
+      [7, 8, 9, 9, 7, 8, 7, 2, 3, 3][rGan];
+  },
+
+  /** 驛馬: rZhi => zhi-idx */
+  YiMa: (rZhi: number) => [2, 11, 8, 5, 2, 11, 8, 5, 2, 11, 8, 5][rZhi],
+};
 
 export const BaZiUtil = {
   log(v: BaZi) {
