@@ -55,7 +55,9 @@ export class BaZi {
       Math.floor(start.getFullYear() + 10 * n)
     );
     return {
-      start: `大運 ${start.getMonth() + 1}月${start.getDate()}日`,
+      start:
+        `大運 ${start.getMonth() + 1}月${start.getDate()}日` +
+        `${new Date(120 * Math.abs(jie.getTime() - birth.getTime()))}`,
       yun: yun.map((n) => Key.Gan[n % 10] + Key.Zhi[n % 12]),
       time: year.map((n) => n.toString()),
     };
