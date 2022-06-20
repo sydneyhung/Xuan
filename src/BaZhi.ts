@@ -40,20 +40,24 @@ export class BaZi {
 
   getDaYun(birth: Date, gender: number) {
     const jz = Util.JiaZi(this.sizhu.m.g, this.sizhu.m.z);
-    const f = Gan(this.sizhu.y.g).YinYang == gender;
-
-    const jie = new Date('1995-11-08T05:35:08.000Z'); //todo
-    const s = new Date(
-      birth.getTime() + Math.abs(jie.getTime() - birth.getTime()) * 120
+    const forward = Gan(this.sizhu.y.g).YinYang == gender;
+    const jie = JieQi.getDate(
+      birth.getFullYear(),
+      JieQi.getJieQi(birth) + (forward ? 0 : 1)
     );
-    const y = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ((f ? n : -n) + jz) % 60);
-    const t = [0, 1, 2, 3, 4, 5, 6, 7].map((n) =>
-      Math.floor(s.getFullYear() + 10 * n)
+    const start = new Date(
+      birth.getTime() + 120 * Math.abs(jie.getTime() - birth.getTime())
+    );
+    const yun = [1, 2, 3, 4, 5, 6, 7, 8].map(
+      (n) => ((forward ? n : -n) + jz) % 60
+    );
+    const year = [0, 1, 2, 3, 4, 5, 6, 7].map((n) =>
+      Math.floor(start.getFullYear() + 10 * n)
     );
     return {
-      start: `大運 ${s.getFullYear()}/${s.getMonth() + 1}/${s.getDate()}`,
-      yun: y.map((n) => Key.Gan[n % 10] + Key.Zhi[n % 12]),
-      time: t.map((n) => n.toString()),
+      start: `大運 ${start.getMonth() + 1}月${start.getDate()}日`,
+      yun: yun.map((n) => Key.Gan[n % 10] + Key.Zhi[n % 12]),
+      time: year.map((n) => n.toString()),
     };
   }
 }
@@ -127,29 +131,29 @@ export const BaZiUtil = {
     const str =
       '時柱      日柱      月柱      年柱\n' +
       '------------------------------------\n' +
-      `${G[v.sizhu.s.g]}　　　　` +
-      `${G[v.sizhu.r.g]}　　　　` +
-      `${G[v.sizhu.m.g]}　　　　` +
-      `${G[v.sizhu.y.g]}\n` +
-      `  ${S[v.sizhu.s.gs]}　　　 日元 　　` +
-      `  ${S[v.sizhu.m.gs]}　　　` +
-      `  ${S[v.sizhu.y.gs]}\n` +
-      `${Z[v.sizhu.s.z]}　　　　` +
-      `${Z[v.sizhu.r.z]}　　　　` +
-      `${Z[v.sizhu.m.z]}　　　　` +
-      `${Z[v.sizhu.y.z]}\n` +
-      ` ${G[v.sizhu.s.zg[0]]}${S[v.sizhu.s.zs[0]]} 　　` +
-      ` ${G[v.sizhu.r.zg[0]]}${S[v.sizhu.r.zs[0]]} 　　` +
-      ` ${G[v.sizhu.m.zg[0]]}${S[v.sizhu.m.zs[0]]} 　　` +
-      ` ${G[v.sizhu.y.zg[0]]}${S[v.sizhu.y.zs[0]]}\n` +
-      ` ${G[v.sizhu.s.zg[1]] || '　'}${S[v.sizhu.s.zs[1]] || '　'} 　　` +
-      ` ${G[v.sizhu.r.zg[1]] || '　'}${S[v.sizhu.r.zs[1]] || '　'} 　　` +
-      ` ${G[v.sizhu.m.zg[1]] || '　'}${S[v.sizhu.m.zs[1]] || '　'} 　　` +
-      ` ${G[v.sizhu.y.zg[1]] || '　'}${S[v.sizhu.y.zs[1]] || '　'}\n` +
-      ` ${G[v.sizhu.s.zg[2]] || '　'}${S[v.sizhu.s.zs[2]] || '　'} 　　` +
-      ` ${G[v.sizhu.r.zg[2]] || '　'}${S[v.sizhu.r.zs[2]] || '　'} 　　` +
-      ` ${G[v.sizhu.m.zg[2]] || '　'}${S[v.sizhu.m.zs[2]] || '　'} 　　` +
-      ` ${G[v.sizhu.y.zg[2]] || '　'}${S[v.sizhu.y.zs[2]] || '　'}\n` +
+      `　${G[v.sizhu.s.g]}　　　` +
+      `　${G[v.sizhu.r.g]}　　　` +
+      `　${G[v.sizhu.m.g]}　　　` +
+      `　${G[v.sizhu.y.g]}\n` +
+      `　　${S[v.sizhu.s.gs]}　　　　　　　` +
+      `　　${S[v.sizhu.m.gs]}　　` +
+      `　　${S[v.sizhu.y.gs]}\n` +
+      `　${Z[v.sizhu.s.z]}　　　` +
+      `　${Z[v.sizhu.r.z]}　　　` +
+      `　${Z[v.sizhu.m.z]}　　　` +
+      `　${Z[v.sizhu.y.z]}\n` +
+      `${G[v.sizhu.s.zg[0]]}　${S[v.sizhu.s.zs[0]]}　　` +
+      `${G[v.sizhu.r.zg[0]]}　${S[v.sizhu.r.zs[0]]}　　` +
+      `${G[v.sizhu.m.zg[0]]}　${S[v.sizhu.m.zs[0]]}　　` +
+      `${G[v.sizhu.y.zg[0]]}　${S[v.sizhu.y.zs[0]]}\n` +
+      `${G[v.sizhu.s.zg[1]] || '　'}　${S[v.sizhu.s.zs[1]] || '　'}　　` +
+      `${G[v.sizhu.r.zg[1]] || '　'}　${S[v.sizhu.r.zs[1]] || '　'}　　` +
+      `${G[v.sizhu.m.zg[1]] || '　'}　${S[v.sizhu.m.zs[1]] || '　'}　　` +
+      `${G[v.sizhu.y.zg[1]] || '　'}　${S[v.sizhu.y.zs[1]] || '　'}\n` +
+      `${G[v.sizhu.s.zg[2]] || '　'}　${S[v.sizhu.s.zs[2]] || '　'}　　` +
+      `${G[v.sizhu.r.zg[2]] || '　'}　${S[v.sizhu.r.zs[2]] || '　'}　　` +
+      `${G[v.sizhu.m.zg[2]] || '　'}　${S[v.sizhu.m.zs[2]] || '　'}　　` +
+      `${G[v.sizhu.y.zg[2]] || '　'}　${S[v.sizhu.y.zs[2]] || '　'}\n` +
       '------------------------------------\n' +
       `${Z[v.sizhu.s.xk[0]]}${Z[v.sizhu.s.xk[1]]}　　　`.slice(0, 5) +
       `${Z[v.sizhu.r.xk[0]]}${Z[v.sizhu.r.xk[1]]}　　　`.slice(0, 5) +

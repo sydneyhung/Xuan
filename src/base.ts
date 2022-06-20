@@ -222,23 +222,11 @@ export class Pillars {
 }
 
 export const JieQi = {
-  /**
-   * @param date
-   * @param q?  0:節氣 1:中氣
-   * @returns index of key.JieQi
-   */
-  getJieQi(date: Date, q?: number) {
-    const _q = q !== undefined;
-    const time = date.getTime();
-    const year = date.getFullYear();
+  getDate(year: number, i: number) {
     const dates = JieQiData[year - 1920].split(',');
-    for (let i = _q ? q : 0; i < dates.length; i += _q ? 2 : 1) {
-      const ymStr = `${year}-${('0' + (Math.floor(i / 2) + 1)).slice(-2)}-`;
-      const rsStr = `${dates[i].slice(0, 2)}T${dates[i].slice(2)}:00:00.000Z`;
-      if (time < new Date(ymStr + rsStr).getTime())
-        return _q ? Math.floor(i / 2) : i;
-    }
-    return 0;
+    const ymStr = `${year}-${('0' + (Math.floor(i / 2) + 1)).slice(-2)}-`;
+    const rsStr = `${dates[i].slice(0, 2)}T${dates[i].slice(2)}:00:00.000Z`;
+    return new Date(ymStr + rsStr);
   },
 
   /**
@@ -247,7 +235,12 @@ export const JieQi = {
    * @returns index of key.Jie
    */
   getJie(date: Date) {
-    return this.getJieQi(date, 0);
+    const time = date.getTime();
+    const year = date.getFullYear();
+    for (let i = 0; i < 24; i += 2) {
+      if (time < this.getDate(year, i).getTime()) return Math.floor(i / 2);
+    }
+    return 0;
   },
 
   /**
@@ -256,7 +249,25 @@ export const JieQi = {
    * @returns index of key.Qi
    */
   getQi(date: Date) {
-    return this.getJieQi(date, 1);
+    const time = date.getTime();
+    const year = date.getFullYear();
+    for (let i = 1; i < 24; i += 2) {
+      if (time < this.getDate(year, i).getTime()) return Math.floor(i / 2);
+    }
+    return 0;
+  },
+
+  /**
+   * @param date
+   * @returns index of key.JieQi
+   */
+  getJieQi(date: Date) {
+    const time = date.getTime();
+    const year = date.getFullYear();
+    for (let i = 0; i < 24; i += 1) {
+      if (time < this.getDate(year, i).getTime()) return i;
+    }
+    return 0;
   },
 };
 
