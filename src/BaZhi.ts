@@ -39,25 +39,23 @@ export class BaZi {
   }
 
   getDaYun(birth: Date, gender: number) {
-    const jz = Util.JiaZi(this.sizhu.m.g, this.sizhu.m.z);
     const forward = Gan(this.sizhu.y.g).YinYang == gender;
     const jie = JieQi.getDate(
       birth.getFullYear(),
       JieQi.getJieQi(birth) + (forward ? 0 : 1)
     );
-    const start = new Date(
+    const start = new Date( //??
       birth.getTime() + 120 * Math.abs(jie.getTime() - birth.getTime())
     );
-    const yun = [1, 2, 3, 4, 5, 6, 7, 8].map(
-      (n) => ((forward ? n : -n) + jz) % 60
-    );
+    const yun = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => {
+      const jz = Util.JiaZi(this.sizhu.m.g, this.sizhu.m.z);
+      return ((forward ? n : -n) + 60 + jz) % 60;
+    });
     const year = [0, 1, 2, 3, 4, 5, 6, 7].map((n) =>
       Math.floor(start.getFullYear() + 10 * n)
     );
     return {
-      start:
-        `大運 ${start.getMonth() + 1}月${start.getDate()}日` +
-        `${new Date(120 * Math.abs(jie.getTime() - birth.getTime()))}`,
+      start: `大運 ${start.getMonth() + 1}月${start.getDate()}日`,
       yun: yun.map((n) => Key.Gan[n % 10] + Key.Zhi[n % 12]),
       time: year.map((n) => n.toString()),
     };
