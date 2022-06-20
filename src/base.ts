@@ -238,7 +238,7 @@ export const JieQi = {
     const time = date.getTime();
     const year = date.getFullYear();
     for (let i = 0; i < 24; i += 2) {
-      if (time < this.getDate(year, i).getTime()) return Math.floor(i / 2);
+      if (time < this.getDate(year, i).getTime()) return i / 2;
     }
     return 0;
   },
@@ -252,7 +252,7 @@ export const JieQi = {
     const time = date.getTime();
     const year = date.getFullYear();
     for (let i = 1; i < 24; i += 2) {
-      if (time < this.getDate(year, i).getTime()) return Math.floor(i / 2);
+      if (time < this.getDate(year, i).getTime()) return (i - 1) / 2;
     }
     return 0;
   },
