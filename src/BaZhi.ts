@@ -44,8 +44,8 @@ export class BaZi {
       birth.getFullYear(),
       JieQi.getJieQi(birth) + (forward ? 0 : 1)
     );
-    const start = new Date( //??
-      birth.getTime() + 120 * Math.abs(jie.getTime() - birth.getTime())
+    const start = new Date(
+      birth.getTime() + 120 * Math.abs(jie.getTime() - birth.getTime()) //??
     );
     const yun = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => {
       const jz = Util.JiaZi(this.sizhu.m.g, this.sizhu.m.z);
